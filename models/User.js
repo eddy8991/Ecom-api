@@ -1,5 +1,6 @@
 const mongoose =require('mongoose');
 const validator = require('validator');
+const{ boolean } = require('webidl-conversions')
 
 const userSchema = new mongoose.Schema({
  username: {
