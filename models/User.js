@@ -1,6 +1,7 @@
 const mongoose =require('mongoose');
 const validator = require('validator');
 const{ boolean } = require('webidl-conversions')
+const bcrypt = require('bcrypt')
 
 const userSchema = new mongoose.Schema({
  username: {
@@ -34,5 +35,17 @@ const userSchema = new mongoose.Schema({
   timestamps:true
 });
 
+
+userSchema.statics.login = async function(email, password) {
+  const user = await this.findOne({ email });
+  if (user) {
+    const auth = await bcrypt.compare(password, user.password);
+    if (auth) {
+      return user;
+    }
+    throw Error('incorrect password or email');
+  }
+  throw Error('incorrect password or email');
+};
 
 module.exports = mongoose.model("User", userSchema)
